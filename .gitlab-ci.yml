@@ -1,0 +1,11 @@
+# ci-templates kendi şablonlarını kendisi kullanır ve test eder.
+include:
+  - local: templates/base.yml
+  - local: templates/secret-scan.yml
+
+yaml-lint:
+  stage: lint
+  image: python:3.12-alpine
+  script:
+    - pip install --quiet yamllint==1.35.1
+    - yamllint .

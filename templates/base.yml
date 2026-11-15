@@ -1,0 +1,16 @@
+# Ortak aşama sırası ve varsayılanlar.
+# Her repo bu dosyayı include listesinin ilk sırasına koyar.
+stages:
+  - lint
+  - test
+  - security
+  - build
+  - publish
+  - deploy
+
+default:
+  # Bütün job'lar order-flow-group runner'ında çalışır (ADR-002, K-18).
+  tags:
+    - orderflow
+  # Aynı branch'e yeni push gelirse eski pipeline iptal edilebilir.
+  interruptible: true
