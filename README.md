@@ -21,6 +21,7 @@ include:
 | --- | --- | --- | --- |
 | `templates/base.yml` | Ortak stage sırası; bütün job'lar `orderflow` runner'ında | — | Hazır |
 | `templates/secret-scan.yml` | gitleaks ile bütün git geçmişinde gizli bilgi taraması | security | Hazır |
+| `templates/spec-lint.yml` | Spectral ile OpenAPI + AsyncAPI lint; uyarı da hata (`$SPEC_OPENAPI_GLOB`, `$SPEC_ASYNCAPI_GLOB`) | lint | Hazır (contracts) |
 | `templates/go.yml` | golangci-lint + go test | lint, test | F0-09 |
 | `templates/docker.yml` | Image build + Container Registry'ye push | build, publish | F0-10 |
 

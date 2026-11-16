@@ -1,0 +1,36 @@
+# Spectral: OpenAPI ve AsyncAPI sözleşmelerini tek araçla lint'ler.
+# Kural seti, repo kökündeki .spectral.yaml dosyasından otomatik okunur.
+# Uyarı (warn) da job'ı kırmızı yapar; sözleşmede "sonra düzeltiriz" yok.
+#
+# Kullanan repo, spec'lerin yerini değişkenlerle söyler:
+#   variables:
+#     SPEC_OPENAPI_GLOB: "openapi/*.yaml"
+#     SPEC_ASYNCAPI_GLOB: "asyncapi/*.yaml"
+# Desenler shell tarafından açılır (Makefile'daki wildcard gibi); `**` desteklenmez.
+# Bir desen hiçbir dosyayla eşleşmezse atlanır; hiçbiri eşleşmezse job kırmızı olur.
+spec-lint:
+  stage: lint
+  image:
+    name: stoplight/spectral:6.15.0
+    # Image'ın entrypoint'i `spectral`; GitLab script'i shell'de çalıştırabilsin diye boşalt.
+    entrypoint: [""]
+  # SPEC_*_GLOB burada job değişkeni olarak tanımlanmıyor: job seviyesindeki değer,
+  # kullanan reponun üst seviye `variables:` değerini ezerdi.
+  script:
+    - |
+      specs=""
+      for pattern in $SPEC_OPENAPI_GLOB $SPEC_ASYNCAPI_GLOB; do
+        for f in $pattern; do
+          if [ -f "$f" ]; then
+            specs="$specs $f"
+          else
+            echo "Eşleşme yok, atlanıyor: $pattern"
+          fi
+        done
+      done
+      if [ -z "$specs" ]; then
+        echo "Lint'lenecek spec bulunamadı. SPEC_OPENAPI_GLOB / SPEC_ASYNCAPI_GLOB değişkenlerini kontrol et."
+        exit 1
+      fi
+      echo "Lint'lenen dosyalar:$specs"
+      spectral lint $specs --fail-severity=warn
