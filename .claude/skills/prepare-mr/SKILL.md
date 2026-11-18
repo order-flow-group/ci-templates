@@ -24,3 +24,4 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git a
    (`--fill` kullanma: açıklamayı commit mesajıyla ezer.)
 8. MR linkini göster. Pipeline varsa `glab ci status` ile durumunu göster.
 GitHub'da PR açma; GitHub sadece ayna.
+Cevaplarını yani işi yaptıktan sonra bana açıklamaları Türkçe olarak ver.
